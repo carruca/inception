@@ -16,10 +16,10 @@ RUN mkdir /www \
 RUN mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.orig
 
 # add new nginx config file
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY srcs/nginx.conf /etc/nginx/nginx.conf
 
 # add dafault index html page
-COPY index.hmtl /www/index.hmtl
+COPY srcs/index.hmtl /www/index.hmtl
 
 # install openrc init system
 RUN apk update \
@@ -27,5 +27,8 @@ RUN apk update \
 
 # start nginx
 RUN rc-service nginx start
+
+# publish port
+EXPOSE 80
 
 CMD ["sh"]
