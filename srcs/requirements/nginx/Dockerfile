@@ -16,10 +16,10 @@ RUN mkdir /www \
 RUN mv /etc/nginx/nginx.conf /etc/nginx/nginx.conf.orig
 
 # add new nginx config file
-COPY srcs/nginx.conf /etc/nginx/nginx.conf
+COPY conf/nginx.conf /etc/nginx/nginx.conf
 
 # add default index html page
-COPY srcs/index.html /www/index.html
+COPY conf/index.html /www/index.html
 
 # publish port
 EXPOSE 443
