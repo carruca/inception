@@ -24,5 +24,4 @@ COPY srcs/index.html /www/index.html
 # publish port
 EXPOSE 443
 
-#CMD nginx -g "daemon off;"
 CMD ["nginx", "-g", "daemon off;"]
