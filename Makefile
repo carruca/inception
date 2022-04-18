@@ -1,7 +1,6 @@
-NAME			= inception
+SRCSPATH	= srcs/
+REQSPATH	= requirements/
 
-SRCSPATH		= srcs/
-
-NGINX_PATH		= nginx/
-
-NGINXSRCS_PATH	= srcs/
+NGINX_PATH	= nginx/
+MARIA_PATH	= mariadb/
+WORDP_PATH	= wordpress/
