@@ -80,6 +80,9 @@ mariadbrm:
 mariadbrmi:
 	$(RMI) mariadb:$(IMG_TAG)
 
+mariadbattach:
+	$(EXEC) -it $(MARIADB_CONTAINER) /bin/sh
+
 # wordpress
 wordpressbuild:
 	$(BUILD) $(WORDPRESS_PATH) -t wordpress:$(IMG_TAG)
