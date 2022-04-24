@@ -20,10 +20,14 @@ RMI					= $(DOCKER) rmi
 PS					= $(DOCKER) ps
 IMAGES				= $(DOCKER) images
 EXEC				= $(DOCKER) exec
+SYSTEM				= $(DOCKER) system
 
 all: build
 
 build:	mariadbbuild nginxbuild
+
+prune:
+	$(SYSTEM) prune
 
 rm:
 	$(PS) --filter status=exited -aq | xargs $(RM)
@@ -64,7 +68,7 @@ mariadbbuild:
 	$(BUILD) $(MARIADB_PATH) -t mariadb:$(IMG_TAG)
 
 mariadbrun:
-	$(RUN) --name $(MARIADB_CONTAINER) -it mariadb:$(IMG_TAG)
+	$(RUN) --name $(MARIADB_CONTAINER) -p 3306:3306 -d mariadb:$(IMG_TAG)
 
 mariadbstop:
 	$(STOP) $(MARIADB_CONTAINER)
@@ -76,4 +80,4 @@ mariadbrmi:
 	$(RMI) mariadb:$(IMG_TAG)
 
 .PHONY: all mariadbbuild nginxbuild
-.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi rm rmi images ps stop
+.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi rm rmi images ps stop prune
