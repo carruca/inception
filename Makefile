@@ -25,7 +25,7 @@ SYSTEM				= $(DOCKER) system
 
 all: build
 
-build:	mariadbbuild nginxbuild
+build:	mariadbbuild nginxbuild wordpressbuild
 
 prune:
 	$(SYSTEM) prune
