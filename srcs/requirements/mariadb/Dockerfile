@@ -12,7 +12,9 @@ WORKDIR /etc
 RUN sed -i 's/skip-networking/#skip-networking/' my.cnf.d/mariadb-server.cnf \
 	&& init.d/mariadb setup 2> /dev/null
 
+WORKDIR /run/mysqld
+RUN chown mysql:mysql .
+
 EXPOSE 3306
 
-CMD ["mysqld"]
-#CMD ["/bin/sh"]
+CMD ["mariadbd", "--user=mysql"]

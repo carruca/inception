@@ -3,12 +3,13 @@ REQS_PATH			= $(SRCS_PATH)requirements/
 IMG_TAG				= dev
 
 NGINX_PATH			= $(REQS_PATH)nginx/
-NGINX_CONTAINER		= webserv_service
+NGINX_CONTAINER		= web_service
 
 MARIADB_PATH		= $(REQS_PATH)mariadb/
 MARIADB_CONTAINER	= db_service
 
 WORDPRESS_PATH		= $(REQS_PATH)wordpress/
+WORDPRESS_CONTAINER	= wordpress_service
 
 DOCKER				= sudo docker
 
@@ -44,7 +45,7 @@ stop:
 images:
 	$(IMAGES)
 
-# webserv
+# web
 nginxbuild:
 	$(BUILD) $(NGINX_PATH) -t nginx:$(IMG_TAG)
 
@@ -79,5 +80,21 @@ mariadbrm:
 mariadbrmi:
 	$(RMI) mariadb:$(IMG_TAG)
 
+# wordpress
+wordpressbuild:
+	$(BUILD) $(WORDPRESS_PATH) -t wordpress:$(IMG_TAG)
+
+wordpressrun:
+	$(RUN) --name $(WORDPRESS_CONTAINER) -p 3306:3306 -it wordpress:$(IMG_TAG)
+
+wordpressstop:
+	$(STOP) $(WORDPRESS_CONTAINER)
+
+wordpressrm:
+	$(RM) $(WORDPRESS_CONTAINER)
+
+wordpressrmi:
+	$(RMI) wordpress:$(IMG_TAG)
+
 .PHONY: all mariadbbuild nginxbuild
-.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi rm rmi images ps stop prune
+.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi wordpressbuild wordpressrun wordpressstop wordpressrm wordpressrmi rm rmi images ps stop prune
