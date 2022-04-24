@@ -2,12 +2,11 @@ FROM alpine:3.15.4
 
 RUN apk update && apk add \
 	mariadb \
-	openrc \
-	vim
+	openrc
 
 WORKDIR /run/openrc
 RUN touch softlevel \
-	&& openrc
+	&& openrc 2> /dev/null
 
 WORKDIR /etc
 RUN sed -i 's/skip-networking/#skip-networking/' my.cnf.d/mariadb-server.cnf \
@@ -15,5 +14,5 @@ RUN sed -i 's/skip-networking/#skip-networking/' my.cnf.d/mariadb-server.cnf \
 
 EXPOSE 3306
 
-CMD ["mysqld_safe"]
+CMD ["mysqld"]
 #CMD ["/bin/sh"]
