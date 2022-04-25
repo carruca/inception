@@ -15,6 +15,4 @@ RUN sed -i 's/skip-networking/#skip-networking/' my.cnf.d/mariadb-server.cnf \
 WORKDIR /run/mysqld
 RUN chown -R mysql:mysql .
 
-EXPOSE 3306
-
 CMD ["mariadbd", "--user=mysql"]

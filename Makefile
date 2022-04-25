@@ -11,7 +11,7 @@ MARIADB_CONTAINER	= db_service
 WORDPRESS_PATH		= $(REQS_PATH)wordpress/
 WORDPRESS_CONTAINER	= wordpress_service
 
-DOCKER				= sudo docker
+DOCKER				= docker
 
 BUILD				= $(DOCKER) build
 RUN					= $(DOCKER) run

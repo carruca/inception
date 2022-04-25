@@ -1,14 +1,14 @@
 FROM alpine:3.15.4
 
 RUN apk update \
-	&& apk add --no-cache mariadb-client php8-fpm wget openrc \
+	&& apk add --no-cache mariadb-client php8 php8-fpm php8-mysql wget openrc \
 	&& rm -f /var/cache/apk/*
 
 WORKDIR /run/openrc
 RUN touch softlevel \
 	&& openrc 2> /dev/null
 
-WORKDIR /var/www/html
+WORKDIR /var/www
 RUN wget https://wordpress.org/wordpress-5.9.3.tar.gz 2> /dev/null \
 	&& tar -xzvf wordpress-5.9.3.tar.gz \
 	&& rm wordpress-5.9.3.tar.gz
