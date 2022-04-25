@@ -1,7 +1,7 @@
 FROM alpine:3.15.4
 
 RUN apk update \
-	&& apk add mariadb openrc \
+	&& apk add --no-cache mariadb openrc \
 	&& rm -f /var/cache/apk/*
 
 WORKDIR /run/openrc

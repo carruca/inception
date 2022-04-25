@@ -23,12 +23,18 @@ IMAGES				= $(DOCKER) images
 EXEC				= $(DOCKER) exec
 SYSTEM				= $(DOCKER) system
 
-all: build
+COMPOSE				= docker-compose
+COMPOSE_PATH		= $(SRCS_PATH)$(COMPOSE).yml
+
+all: build up
+
+up:
+	$(COMPOSE) -f $(COMPOSE_PATH) up
 
 build:	mariadbbuild nginxbuild wordpressbuild
 
 prune:
-	$(SYSTEM) prune
+	$(SYSTEM) prune -a
 
 rm:
 	$(PS) --filter status=exited -aq | xargs $(RM)
