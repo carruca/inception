@@ -1,7 +1,13 @@
 FROM alpine:3.15.4
 
 RUN apk update \
-	&& apk add --no-cache mariadb-client php8 php8-fpm php8-mysql wget openrc \
+	&& apk add --no-cache \
+	mariadb-client \
+	php8 \
+	php8-fpm \
+	php8-mysqli \
+	wget \
+	openrc \
 	&& rm -f /var/cache/apk/*
 
 WORKDIR /run/openrc
