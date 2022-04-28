@@ -58,7 +58,7 @@ nginxbuild:
 	$(BUILD) $(NGINX_PATH) -t nginx:$(IMG_TAG)
 
 nginxrun:
-	$(RUN) --name $(NGINX_CONTAINER) -p 443:443 -d --network=$(NETWORK_NAME) nginx:$(IMG_TAG)
+	$(RUN) --name $(NGINX_CONTAINER) -p 443:443 -dit --network=$(NETWORK_NAME) nginx:$(IMG_TAG)
 
 nginxstop:
 	$(STOP) $(NGINX_CONTAINER)
@@ -77,7 +77,7 @@ mariadbbuild:
 	$(BUILD) $(MARIADB_PATH) -t mariadb:$(IMG_TAG)
 
 mariadbrun:
-	$(RUN) --name $(MARIADB_CONTAINER) -d --network=$(NETWORK_NAME) mariadb:$(IMG_TAG)
+	$(RUN) --name $(MARIADB_CONTAINER) -dit --network=$(NETWORK_NAME) mariadb:$(IMG_TAG)
 
 mariadbstop:
 	$(STOP) $(MARIADB_CONTAINER)
@@ -96,7 +96,7 @@ wordpressbuild:
 	$(BUILD) $(WORDPRESS_PATH) -t wordpress:$(IMG_TAG)
 
 wordpressrun:
-	$(RUN) --name $(WORDPRESS_CONTAINER) -it --network=$(NETWORK_NAME) wordpress:$(IMG_TAG)
+	$(RUN) --name $(WORDPRESS_CONTAINER) -dit --network=$(NETWORK_NAME) wordpress:$(IMG_TAG)
 
 wordpressstop:
 	$(STOP) $(WORDPRESS_CONTAINER)
