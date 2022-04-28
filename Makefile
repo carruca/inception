@@ -33,7 +33,9 @@ all: build
 up:
 	$(COMPOSE) -f $(COMPOSE_PATH) up
 
-build:	mariadbbuild nginxbuild wordpressbuild
+build:	mariadbbuild wordpressbuild nginxbuild
+
+run:	mariadbrun wordpressrun nginxrun
 
 prune:
 	$(SYSTEM) prune -a

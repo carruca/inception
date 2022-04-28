@@ -13,5 +13,5 @@ RUN wget https://wordpress.org/wordpress-5.9.3.tar.gz 2> /dev/null \
 	&& tar -xzvf wordpress-5.9.3.tar.gz \
 	&& rm wordpress-5.9.3.tar.gz
 
-#CMD ["php-fpm8"]
-CMD ["/bin/sh"]
+CMD ["php-fpm8", "-F"]
+#CMD ["/bin/sh"]
