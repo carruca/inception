@@ -33,6 +33,8 @@ all: build
 up:
 	$(COMPOSE) -f $(COMPOSE_PATH) up
 
+re: stop rm build
+
 build:	mariadbbuild wordpressbuild nginxbuild
 
 run:	mariadbrun wordpressrun nginxrun
@@ -109,5 +111,8 @@ wordpressrm:
 wordpressrmi:
 	$(RMI) wordpress:$(IMG_TAG)
 
+wordpressattach:
+	$(EXEC) -it $(WORDPRESS_CONTAINER) /bin/sh
+
 .PHONY: all mariadbbuild nginxbuild
-.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi wordpressbuild wordpressrun wordpressstop wordpressrm wordpressrmi rm rmi images ps stop prune
+.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi mariadbattach wordpressbuild wordpressrun wordpressstop wordpressrm wordpressrmi wordpressattach rm rmi images ps stop prune
