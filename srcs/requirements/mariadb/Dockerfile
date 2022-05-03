@@ -21,7 +21,9 @@ RUN chown -R mysql:mysql .
 
 
 #WORKDIR /
-#COPY wordpress-db-config.sql .
-#RUN mysql < wordpress-db-config.sql
+COPY wordpress-db-config.sql .
+RUN rc-service mariadb start 2> /dev/null \
+	&& mysql < wordpress-db-config.sql \
+	&& rm wordpress-db-config.sql
 
 CMD ["mariadbd", "--user=mysql"]
