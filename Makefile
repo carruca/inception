@@ -3,13 +3,13 @@ REQS_PATH			= $(SRCS_PATH)requirements/
 IMG_TAG				= dev
 
 NGINX_PATH			= $(REQS_PATH)nginx/
-NGINX_CONTAINER		= web-service
+NGINX_CONTAINER		= nginx
 
 MARIADB_PATH		= $(REQS_PATH)mariadb/
-MARIADB_CONTAINER	= db-service
+MARIADB_CONTAINER	= mariadb
 
 WORDPRESS_PATH		= $(REQS_PATH)wordpress/
-WORDPRESS_CONTAINER	= wordpress-service
+WORDPRESS_CONTAINER	= wordpress
 
 DOCKER				= docker
 
@@ -23,6 +23,7 @@ IMAGES				= $(DOCKER) images
 EXEC				= $(DOCKER) exec
 SYSTEM				= $(DOCKER) system
 
+CREATE				= $(DOCKER) network create
 NETWORK_NAME		= inception-net
 
 COMPOSE				= docker-compose
@@ -57,12 +58,15 @@ stop:
 images:
 	$(IMAGES)
 
+net:
+	$(CREATE) $(NETWORK_NAME)
+
 # web
 nginxbuild:
 	$(BUILD) $(NGINX_PATH) -t nginx:$(IMG_TAG)
 
 nginxrun:
-	$(RUN) --name $(NGINX_CONTAINER) -p 443:443 -dit --network=$(NETWORK_NAME) nginx:$(IMG_TAG)
+	$(RUN) --name $(NGINX_CONTAINER) -p 80:80 -dit --network=$(NETWORK_NAME) nginx:$(IMG_TAG)
 
 nginxstop:
 	$(STOP) $(NGINX_CONTAINER)
@@ -114,5 +118,5 @@ wordpressrmi:
 wordpressattach:
 	$(EXEC) -it $(WORDPRESS_CONTAINER) /bin/sh
 
-.PHONY: all mariadbbuild nginxbuild
-.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi mariadbattach wordpressbuild wordpressrun wordpressstop wordpressrm wordpressrmi wordpressattach rm rmi images ps stop prune
+.PHONY: all mariadbbuild nginxbuild net
+.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi mariadbattach wordpressbuild wordpressrun wordpressstop wordpressrm wordpressrmi wordpressattach rm rmi images ps stop prune net
