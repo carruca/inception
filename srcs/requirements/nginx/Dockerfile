@@ -20,6 +20,6 @@ COPY conf/nginx.conf /etc/nginx/nginx.conf
 COPY conf/default.conf /etc/nginx/http.d/default.conf
 COPY conf/index.html /var/www/index.html
 
-EXPOSE 443
+EXPOSE 80
 
 CMD ["nginx", "-g", "daemon off;"]

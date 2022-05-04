@@ -14,6 +14,9 @@ RUN wget https://wordpress.org/wordpress-5.9.3.tar.gz 2> /dev/null \
 	&& tar -xzvf wordpress-5.9.3.tar.gz \
 	&& rm wordpress-5.9.3.tar.gz
 
+RUN adduser -D -g 'www' www \
+	&& chown -R www:www /var/www
+
 COPY conf/wp-config.php wordpress
 COPY conf/www.conf /etc/php8/php-fpm.d
 
