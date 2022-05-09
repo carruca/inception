@@ -6,6 +6,7 @@ RUN apk update \
 	mariadb-client \
 	openrc \
 	vim \
+	gettext \
 	&& rm -f /var/cache/apk/*
 
 WORKDIR /run/openrc
@@ -19,11 +20,9 @@ RUN sed -i 's/skip-networking/#skip-networking/' my.cnf.d/mariadb-server.cnf \
 WORKDIR /run/mysqld
 RUN chown -R mysql:mysql .
 
-
-#WORKDIR /
-COPY wordpress-db-config.sql .
+COPY tools/db-setup.sql .
 RUN rc-service mariadb start 2> /dev/null \
-	&& mysql < wordpress-db-config.sql \
-	&& rm wordpress-db-config.sql
+	&& mysql < db-setup.sql \
+	&& rm db-setup.sql
 
 CMD ["mariadbd", "--user=mysql"]

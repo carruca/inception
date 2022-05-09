@@ -27,6 +27,8 @@ IMAGES					= $(DOCKER) images
 EXEC					= $(DOCKER) exec
 SYSTEM					= $(DOCKER) system
 
+EDIT					= vim -O
+
 CREATE					= $(DOCKER) network create
 NETWORK_NAME			= inception-net
 
@@ -87,6 +89,9 @@ nginxrmi:
 nginxattach:
 	$(EXEC) -it $(NGINX_CONTAINER) /bin/sh
 
+nginxedit:
+	$(EDIT) $(NGINX_PATH)Dockerfile $(NGINX_PATH)conf/*
+
 # db
 mariadbbuild:
 	$(BUILD) $(MARIADB_PATH) -t mariadb:$(IMG_TAG)
@@ -105,6 +110,9 @@ mariadbrmi:
 
 mariadbattach:
 	$(EXEC) -it $(MARIADB_CONTAINER) /bin/sh
+
+mariadbedit:
+	$(EDIT) $(MARIADB_PATH)Dockerfile $(MARIADB_PATH)tools/*
 
 # wordpress
 wordpressbuild:
@@ -125,5 +133,8 @@ wordpressrmi:
 wordpressattach:
 	$(EXEC) -it $(WORDPRESS_CONTAINER) /bin/sh
 
+wordpressedit:
+	$(EDIT) $(WORDPRESS_PATH)Dockerfile $(WORDPRESS_PATH)conf/*
+
 .PHONY: all mariadbbuild nginxbuild net
-.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi mariadbattach wordpressbuild wordpressrun wordpressstop wordpressrm wordpressrmi wordpressattach rm rmi images ps stop prune net volumerm
+.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach nginxedit mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi mariadbattach mariadbedit wordpressbuild wordpressrun wordpressstop wordpressrm wordpressrmi wordpressattach wordpressedit rm rmi images ps stop prune net volumerm

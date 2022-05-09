@@ -7,6 +7,7 @@ RUN apk update \
 	php8-mysqli \
 	wget \
 	vim \
+	gettext \
 	&& rm -f /var/cache/apk/*
 
 WORKDIR /var/www
