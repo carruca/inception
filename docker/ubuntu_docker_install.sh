@@ -1,18 +1,18 @@
 #!/bin/bash
 
-sudo apt-get remove		\
-	docker			\
-	docker-engine	\
-	docker.io		\
-	containerd		\
+sudo apt-get remove \
+	docker \
+	docker-engine \
+	docker.io \
+	containerd \
 	runc;
 
 sudo apt-get update;
 
-sudo apt-get install -y	\
-	ca-certificates	\
-	curl			\
-	gnupg			\
+sudo apt-get install -y \
+	ca-certificates \
+	curl \
+	gnupg \
 	lsb-release;
 
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg \
@@ -27,7 +27,7 @@ echo \
 
 sudo apt-get update;
 
-sudo apt-get install -y	\
-	docker-ce		\
-	docker-ce-cli   \
+sudo apt-get install -y \
+	docker-ce \
+	docker-ce-cli \
 	containerd.io;

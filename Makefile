@@ -137,4 +137,6 @@ wordpressedit:
 	$(EDIT) $(WORDPRESS_PATH)Dockerfile $(WORDPRESS_PATH)conf/*
 
 .PHONY: all mariadbbuild nginxbuild net
-.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach nginxedit mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi mariadbattach mariadbedit wordpressbuild wordpressrun wordpressstop wordpressrm wordpressrmi wordpressattach wordpressedit rm rmi images ps stop prune net volumerm
+$(V).SILENT:
+
+#.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach nginxedit mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi mariadbattach mariadbedit wordpressbuild wordpressrun wordpressstop wordpressrm wordpressrmi wordpressattach wordpressedit rm rmi images ps stop prune net volumerm
