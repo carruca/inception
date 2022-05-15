@@ -1,3 +1,38 @@
 services:
-  web:
-    image: nginx
+
+  mysql:
+    image: mariadb:dev
+    build:
+      context: requirements/mariadb
+      args:
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        MYSQL_DATABASE: ${WORDPRESS_HOST}
+    container_name: mariadb
+    volumes:
+      - /data/mysql:/var/lib/mysql
+    restart: on-failure
+    networks:
+      - inception-net
+
+#  wordpress:
+#    image: wordpress:5.9-php8.0-fpm-alpine
+#    volumes:
+#      - /data/wordpress:/var/www
+#    depends_on:
+#      - mysql
+#    environment:
+#      WORDPRESS_DB_HOST: ${MYSQL_HOST}
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#      WORDPRESS_DB_NAME: ${WORDPRESS_HOST}
+#      WORDPRESS_DB_USER: ${MYSQL_USER}
+#      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+#      WORDPRESS_TABLE_PREFIX: wp_
+#    restart: on-failure
+#    networks:
+#      - inception-net
+
+networks:
+  inception-net:
+    name: inception-net

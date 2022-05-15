@@ -7,13 +7,13 @@ NGINX_CONTAINER			= nginx
 
 MARIADB_PATH			= $(REQS_PATH)mariadb/
 MARIADB_CONTAINER		= mariadb
-MARIADB_VOLUME_DIR		= mariadb_volume
-MARIADB_VOLUME			= source=$(MARIADB_VOLUME_DIR),target=/var/lib/mysql
+MARIADB_VOLUME_PATH		= mariadb_volume
+MARIADB_VOLUME			= source=$(MARIADB_VOLUME_PATH),target=/var/lib/mysql
 
 WORDPRESS_PATH			= $(REQS_PATH)wordpress/
 WORDPRESS_CONTAINER		= wordpress
-WORDPRESS_VOLUME_DIR	= wordpress_volume
-WORDPRESS_VOLUME		= source=$(WORDPRESS_VOLUME_DIR),target=/var/www
+WORDPRESS_VOLUME_PATH	= wordpress_volume
+WORDPRESS_VOLUME		= source=$(WORDPRESS_VOLUME_PATH),target=/var/www
 
 DOCKER					= docker
 
@@ -32,17 +32,26 @@ EDIT					= vim -O
 CREATE					= $(DOCKER) network create
 NETWORK_NAME			= inception-net
 
+ENV_PATH				= srcs/.env
+
 COMPOSE					= docker-compose
 COMPOSE_PATH			= $(SRCS_PATH)$(COMPOSE).yml
 
 all: build
 
 up:
-	$(COMPOSE) -f $(COMPOSE_PATH) up
+	$(COMPOSE) -f $(COMPOSE_PATH) --env-file $(ENV_PATH) up -d
+
+build:
+	$(COMPOSE) -f $(COMPOSE_PATH) --env-file $(ENV_PATH) up -d --build
+
+down:
+	$(COMPOSE) -f $(COMPOSE_PATH) down --rmi all
+
+edit:
+	$(EDIT) $(COMPOSE_PATH)
 
 re: stop rm build
-
-build:	mariadbbuild wordpressbuild nginxbuild
 
 run:	mariadbrun wordpressrun nginxrun
 
@@ -68,7 +77,10 @@ net:
 	$(CREATE) $(NETWORK_NAME)
 
 volumerm:
-	$(DOCKER) volume rm $(MARIADB_VOLUME_DIR) $(WORDPRESS_VOLUME_DIR)
+	$(DOCKER) volume rm $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH)
+
+envedit:
+	$(EDIT) $(ENV_PATH)
 
 # web
 nginxbuild:
