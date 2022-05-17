@@ -1,38 +1,65 @@
 services:
 
-  mysql:
+  mariadb:
     image: mariadb:dev
     build:
       context: requirements/mariadb
       args:
+        MYSQL_ROOT_USER: ${MYSQL_ROOT_USER}
         MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
         MYSQL_USER: ${MYSQL_USER}
         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         MYSQL_DATABASE: ${WORDPRESS_HOST}
     container_name: mariadb
     volumes:
-      - /data/mysql:/var/lib/mysql
+      - mariadb:/var/lib/mysql
     restart: on-failure
     networks:
       - inception-net
 
-#  wordpress:
-#    image: wordpress:5.9-php8.0-fpm-alpine
-#    volumes:
-#      - /data/wordpress:/var/www
-#    depends_on:
-#      - mysql
+  wordpress:
+    image: wordpress:dev
+    build:
+      context: requirements/wordpress
+      args:
+        WORDPRESS_DB_NAME: ${WORDPRESS_HOST}
+        WORDPRESS_DB_USER: ${MYSQL_USER}
+        WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+        WORDPRESS_DB_HOST: ${MARIADB_HOST}
+    container_name: wordpress
 #    environment:
-#      WORDPRESS_DB_HOST: ${MYSQL_HOST}
-#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-#      WORDPRESS_DB_NAME: ${WORDPRESS_HOST}
 #      WORDPRESS_DB_USER: ${MYSQL_USER}
 #      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
-#      WORDPRESS_TABLE_PREFIX: wp_
-#    restart: on-failure
-#    networks:
-#      - inception-net
+#      WORDPRESS_DB_HOST: ${MARIADB_HOST}
+    volumes:
+      - wordpress:/var/www
+    depends_on:
+      - mariadb
+    restart: on-failure
+    networks:
+      - inception-net
+
+  nginx:
+    image: nginx:dev
+    build:
+      context: requirements/nginx
+    container_name: nginx
+    volumes:
+      - wordpress:/var/www
+    depends_on:
+      - wordpress
+    restart: on-failure
+    ports:
+      - 80:80
+    networks:
+      - inception-net
 
 networks:
   inception-net:
     name: inception-net
+
+volumes:
+  mariadb:
+    name: mariadb-volume
+  wordpress:
+    name: wordpress-volume

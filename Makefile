@@ -7,12 +7,12 @@ NGINX_CONTAINER			= nginx
 
 MARIADB_PATH			= $(REQS_PATH)mariadb/
 MARIADB_CONTAINER		= mariadb
-MARIADB_VOLUME_PATH		= mariadb_volume
+MARIADB_VOLUME_PATH		= mariadb-volume
 MARIADB_VOLUME			= source=$(MARIADB_VOLUME_PATH),target=/var/lib/mysql
 
 WORDPRESS_PATH			= $(REQS_PATH)wordpress/
 WORDPRESS_CONTAINER		= wordpress
-WORDPRESS_VOLUME_PATH	= wordpress_volume
+WORDPRESS_VOLUME_PATH	= wordpress-volume
 WORDPRESS_VOLUME		= source=$(WORDPRESS_VOLUME_PATH),target=/var/www
 
 DOCKER					= docker
@@ -34,24 +34,29 @@ NETWORK_NAME			= inception-net
 
 ENV_PATH				= srcs/.env
 
-COMPOSE					= docker-compose
-COMPOSE_PATH			= $(SRCS_PATH)$(COMPOSE).yml
+COMPOSE_PATH			= $(SRCS_PATH)docker-compose.yml
+COMPOSE					= docker-compose -f $(COMPOSE_PATH)
 
 all: build
 
 up:
-	$(COMPOSE) -f $(COMPOSE_PATH) --env-file $(ENV_PATH) up -d
+	$(COMPOSE) --env-file $(ENV_PATH) up -d
 
 build:
-	$(COMPOSE) -f $(COMPOSE_PATH) --env-file $(ENV_PATH) up -d --build
+	$(COMPOSE) --env-file $(ENV_PATH) up -d --build
 
 down:
-	$(COMPOSE) -f $(COMPOSE_PATH) down --rmi all
+	$(COMPOSE) down
+
+logs:
+	$(COMPOSE) logs
 
 edit:
 	$(EDIT) $(COMPOSE_PATH)
 
-re: stop rm build
+re: clean build
+
+clean: stop rm
 
 run:	mariadbrun wordpressrun nginxrun
 
@@ -148,7 +153,5 @@ wordpressattach:
 wordpressedit:
 	$(EDIT) $(WORDPRESS_PATH)Dockerfile $(WORDPRESS_PATH)conf/*
 
-.PHONY: all mariadbbuild nginxbuild net
 $(V).SILENT:
-
-#.SILENT: nginxbuild nginxrun nginxstop nginxrm nginxrmi nginxattach nginxedit mariadbbuild mariadbrun mariadbstop mariadbrm mariadbrmi mariadbattach mariadbedit wordpressbuild wordpressrun wordpressstop wordpressrm wordpressrmi wordpressattach wordpressedit rm rmi images ps stop prune net volumerm
+.PHONY: all mariadbbuild nginxbuild net
