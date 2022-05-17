@@ -1,5 +1,11 @@
 FROM alpine:3.15
 
+ARG MYSQL_ROOT_USER
+ARG MYSQL_ROOT_PASSWORD
+ARG MYSQL_USER
+ARG MYSQL_PASSWORD
+ARG MYSQL_DATABASE
+
 RUN apk update \
 	&& apk add --no-cache \
 	mariadb \
@@ -20,9 +26,8 @@ RUN sed -i 's/skip-networking/#skip-networking/' my.cnf.d/mariadb-server.cnf \
 WORKDIR /run/mysqld
 RUN chown -R mysql:mysql .
 
-COPY tools/db-setup.sql .
-RUN rc-service mariadb start 2> /dev/null \
-	&& mysql < db-setup.sql \
-	&& rm db-setup.sql
+COPY tools/db-setup.sh .
+RUN sh db-setup.sh \
+	&& rm db-setup.sh
 
 CMD ["mariadbd", "--user=mysql"]

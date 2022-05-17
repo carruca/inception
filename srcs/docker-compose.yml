@@ -10,7 +10,7 @@ services:
         MYSQL_USER: ${MYSQL_USER}
         MYSQL_PASSWORD: ${MYSQL_PASSWORD}
         MYSQL_DATABASE: ${WORDPRESS_HOST}
-    container_name: mariadb
+    container_name: ${MARIADB_HOST}
     volumes:
       - mariadb:/var/lib/mysql
     restart: on-failure
@@ -26,11 +26,7 @@ services:
         WORDPRESS_DB_USER: ${MYSQL_USER}
         WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
         WORDPRESS_DB_HOST: ${MARIADB_HOST}
-    container_name: wordpress
-#    environment:
-#      WORDPRESS_DB_USER: ${MYSQL_USER}
-#      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
-#      WORDPRESS_DB_HOST: ${MARIADB_HOST}
+    container_name: ${WORDPRESS_HOST}
     volumes:
       - wordpress:/var/www
     depends_on:
@@ -43,16 +39,19 @@ services:
     image: nginx:dev
     build:
       context: requirements/nginx
-    container_name: nginx
+      args:
+        DOMAIN_NAME: ${DOMAIN_NAME}
+        WORDPRESS_HOST: ${WORDPRESS_HOST}
+    container_name: ${NGINX_HOST}
     volumes:
       - wordpress:/var/www
     depends_on:
       - wordpress
     restart: on-failure
-    ports:
-      - 80:80
     networks:
       - inception-net
+    ports:
+      - 80:80
 
 networks:
   inception-net:

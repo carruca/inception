@@ -23,13 +23,13 @@
 define( 'DB_NAME', '$WORDPRESS_DB_NAME' );
 
 /** Database username */
-define( 'DB_USER', 'test' );
+define( 'DB_USER', '$WORDPRESS_DB_USER' );
 
 /** Database password */
-define( 'DB_PASSWORD', '1234' );
+define( 'DB_PASSWORD', '$WORDPRESS_DB_PASSWORD' );
 
 /** Database hostname */
-define( 'DB_HOST', 'mariadb' );
+define( 'DB_HOST', '$WORDPRESS_DB_HOST' );
 
 /** Database charset to use in creating database tables. */
 define( 'DB_CHARSET', 'utf8' );
