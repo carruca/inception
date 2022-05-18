@@ -92,7 +92,7 @@ nginxbuild:
 	$(BUILD) $(NGINX_PATH) -t nginx:$(IMG_TAG)
 
 nginxrun:
-	$(RUN) --name $(NGINX_CONTAINER) -p 443:443 -dit --network=$(NETWORK_NAME) --mount $(WORDPRESS_VOLUME) nginx:$(IMG_TAG)
+	$(RUN) --name $(NGINX_CONTAINER) -p 80:80 -dit --network=$(NETWORK_NAME) --mount $(WORDPRESS_VOLUME) nginx:$(IMG_TAG)
 
 nginxstop:
 	$(STOP) $(NGINX_CONTAINER)
