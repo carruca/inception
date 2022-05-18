@@ -35,7 +35,7 @@ NETWORK_NAME			= inception-net
 ENV_PATH				= srcs/.env
 
 COMPOSE_PATH			= $(SRCS_PATH)docker-compose.yml
-COMPOSE					= docker-compose -f $(COMPOSE_PATH)
+COMPOSE					= docker compose -f $(COMPOSE_PATH)
 
 all: build
 

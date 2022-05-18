@@ -60,5 +60,13 @@ networks:
 volumes:
   mariadb:
     name: mariadb-volume
+    driver_opts:
+      o: bind
+      type: none
+      device: ${VOLUME_PATH}/mariadb
   wordpress:
     name: wordpress-volume
+    driver_opts:
+      o: bind
+      type: none
+      device: ${VOLUME_PATH}/wordpress
