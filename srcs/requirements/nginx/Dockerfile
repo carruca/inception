@@ -5,9 +5,13 @@ ARG WORDPRESS_HOST
 RUN apk update \
 	&& apk add --no-cache \
 	nginx \
+	openssl \
 	gettext \
 	vim \
 	&& rm -f /var/cache/apk/*
+
+RUN openssl req -x509 -days 365 -nodes -newkey rsa -subj '/CN=localhost' \
+	-keyout /etc/ssl/certs/localhost.key -out /etc/ssl/certs/localhost.crt 2> /dev/null
 
 WORKDIR /var/www
 RUN adduser -D -g 'www' www \
@@ -27,5 +31,6 @@ RUN envsubst \
 	< http.d/default.conf.template > http.d/default.conf
 
 EXPOSE 80
+#EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]

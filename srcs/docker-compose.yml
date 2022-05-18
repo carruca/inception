@@ -51,7 +51,7 @@ services:
     networks:
       - inception-net
     ports:
-      - 80:80
+      - ${PORT}:${PORT}
 
 networks:
   inception-net:

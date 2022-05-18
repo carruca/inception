@@ -3,9 +3,13 @@
 
 server {
 	listen 80;
+#	listen 443 ssl;
+#	ssl_certificate /etc/ssl/certs/localhost.crt;
+#	ssl_certificate_key /etc/ssl/certs/localhost.key;
+
 	root /var/www/wordpress;
 	index index.php index.html index.htm;
-	server_name _;
+	server_name localhost;
 	error_page 500 502 503 504 /50x.hmtl;
 	location = /50x.html {
 		root /var/lib/nginx/html;
