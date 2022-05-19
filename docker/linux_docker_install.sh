@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ !$(env | grep DISTRO) && "$DISTRO" != ubuntu && "$DISTRO" != debian ]];
-then 
+then
 	echo "Please export a valid linux distro: < DISTRO=ubuntu > or < DISTRO=debian > ]";
 	exit 1;
 else

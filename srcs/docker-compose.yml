@@ -1,7 +1,7 @@
 services:
 
   mariadb:
-    image: mariadb:dev
+    image: ${MARIADB_HOST}:${TAG}
     build:
       context: requirements/mariadb
       args:
@@ -18,7 +18,7 @@ services:
       - inception-net
 
   wordpress:
-    image: wordpress:dev
+    image: ${WORDPRESS_HOST}:${TAG}
     build:
       context: requirements/wordpress
       args:
@@ -36,7 +36,7 @@ services:
       - inception-net
 
   nginx:
-    image: nginx:dev
+    image: ${NGINX_HOST}:${TAG}
     build:
       context: requirements/nginx
       args:

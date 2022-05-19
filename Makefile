@@ -4,21 +4,20 @@ IMG_TAG					= dev
 
 NGINX_PATH				= $(REQS_PATH)nginx/
 NGINX_CONTAINER			= nginx
+NGINX_IMAGE				= $(NGINX_CONTAINER)
 
 MARIADB_PATH			= $(REQS_PATH)mariadb/
 MARIADB_CONTAINER		= mariadb
-MARIADB_VOLUME_PATH		= mariadb-volume
-MARIADB_VOLUME			= source=$(MARIADB_VOLUME_PATH),target=/var/lib/mysql
+MARIADB_IMAGE			= $(MARIADB_CONTAINER)
+MARIADB_VOLUME			= mariadb-volume
 
 WORDPRESS_PATH			= $(REQS_PATH)wordpress/
 WORDPRESS_CONTAINER		= wordpress
-WORDPRESS_VOLUME_PATH	= wordpress-volume
-WORDPRESS_VOLUME		= source=$(WORDPRESS_VOLUME_PATH),target=/var/www
+WORDPRESS_IMAGE			= $(WORDPRESS_CONTAINER)
+WORDPRESS_VOLUME		= wordpress-volume
 
 DOCKER					= docker
 
-BUILD					= $(DOCKER) build
-RUN						= $(DOCKER) run
 STOP					= $(DOCKER) stop
 RM						= $(DOCKER) rm
 RMI						= $(DOCKER) rmi
@@ -29,9 +28,6 @@ SYSTEM					= $(DOCKER) system
 
 EDIT					= vim -O
 
-CREATE					= $(DOCKER) network create
-NETWORK_NAME			= inception-net
-
 ENV_PATH				= srcs/.env
 
 COMPOSE_PATH			= $(SRCS_PATH)docker-compose.yml
@@ -39,11 +35,11 @@ COMPOSE					= docker compose -f $(COMPOSE_PATH)
 
 all: build
 
-up:
-	$(COMPOSE) --env-file $(ENV_PATH) up -d
-
 build:
 	$(COMPOSE) --env-file $(ENV_PATH) up -d --build
+
+up:
+	$(COMPOSE) --env-file $(ENV_PATH) up -d
 
 down:
 	$(COMPOSE) down
@@ -54,11 +50,8 @@ logs:
 edit:
 	$(EDIT) $(COMPOSE_PATH)
 
-re: clean build
-
-clean: stop rm
-
-run:	mariadbrun wordpressrun nginxrun
+envedit:
+	$(EDIT) $(ENV_PATH)
 
 prune:
 	$(SYSTEM) prune -a
@@ -69,31 +62,23 @@ rm:
 rmi:
 	$(IMAGES) -q | xargs $(RMI)
 
-ps:
-	$(PS) -a
-
 stop:
 	$(PS) -q | xargs $(STOP)
+
+clean: stop rm
+
+re: clean build
+
+volumerm:
+	$(DOCKER) volume rm $(MARIADB_VOLUME) $(WORDPRESS_VOLUME)
 
 images:
 	$(IMAGES)
 
-net:
-	$(CREATE) $(NETWORK_NAME)
+ps:
+	$(PS) -a
 
-volumerm:
-	$(DOCKER) volume rm $(MARIADB_VOLUME_PATH) $(WORDPRESS_VOLUME_PATH)
-
-envedit:
-	$(EDIT) $(ENV_PATH)
-
-# web
-nginxbuild:
-	$(BUILD) $(NGINX_PATH) -t nginx:$(IMG_TAG)
-
-nginxrun:
-	$(RUN) --name $(NGINX_CONTAINER) -p 80:80 -dit --network=$(NETWORK_NAME) --mount $(WORDPRESS_VOLUME) nginx:$(IMG_TAG)
-
+# nginx
 nginxstop:
 	$(STOP) $(NGINX_CONTAINER)
 
@@ -101,7 +86,7 @@ nginxrm:
 	$(RM) $(NGINX_CONTAINER)
 
 nginxrmi:
-	$(RMI) nginx:$(IMG_TAG)
+	$(RMI) $(NGINX_IMAGE):$(IMG_TAG)
 
 nginxattach:
 	$(EXEC) -it $(NGINX_CONTAINER) /bin/sh
@@ -109,13 +94,7 @@ nginxattach:
 nginxedit:
 	$(EDIT) $(NGINX_PATH)Dockerfile $(NGINX_PATH)conf/*
 
-# db
-mariadbbuild:
-	$(BUILD) $(MARIADB_PATH) -t mariadb:$(IMG_TAG)
-
-mariadbrun:
-	$(RUN) --name $(MARIADB_CONTAINER) -dit --network=$(NETWORK_NAME) --mount $(MARIADB_VOLUME) mariadb:$(IMG_TAG)
-
+# mariadb
 mariadbstop:
 	$(STOP) $(MARIADB_CONTAINER)
 
@@ -123,7 +102,7 @@ mariadbrm:
 	$(RM) $(MARIADB_CONTAINER)
 
 mariadbrmi:
-	$(RMI) mariadb:$(IMG_TAG)
+	$(RMI) $(MARIADB_IMAGE):$(IMG_TAG)
 
 mariadbattach:
 	$(EXEC) -it $(MARIADB_CONTAINER) /bin/sh
@@ -132,12 +111,6 @@ mariadbedit:
 	$(EDIT) $(MARIADB_PATH)Dockerfile $(MARIADB_PATH)tools/*
 
 # wordpress
-wordpressbuild:
-	$(BUILD) $(WORDPRESS_PATH) -t wordpress:$(IMG_TAG)
-
-wordpressrun:
-	$(RUN) --name $(WORDPRESS_CONTAINER) -dit --network=$(NETWORK_NAME) --mount $(WORDPRESS_VOLUME) wordpress:$(IMG_TAG)
-
 wordpressstop:
 	$(STOP) $(WORDPRESS_CONTAINER)
 
@@ -145,7 +118,7 @@ wordpressrm:
 	$(RM) $(WORDPRESS_CONTAINER)
 
 wordpressrmi:
-	$(RMI) wordpress:$(IMG_TAG)
+	$(RMI) $(WORDPRESS_IMAGE):$(IMG_TAG)
 
 wordpressattach:
 	$(EXEC) -it $(WORDPRESS_CONTAINER) /bin/sh
@@ -154,4 +127,4 @@ wordpressedit:
 	$(EDIT) $(WORDPRESS_PATH)Dockerfile $(WORDPRESS_PATH)conf/*
 
 $(V).SILENT:
-.PHONY: all mariadbbuild nginxbuild net
+.PHONY:
