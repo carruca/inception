@@ -21,7 +21,6 @@ DOCKER					= docker
 STOP					= $(DOCKER) stop
 RM						= $(DOCKER) rm
 RMI						= $(DOCKER) rmi
-PS						= $(DOCKER) ps
 IMAGES					= $(DOCKER) images
 EXEC					= $(DOCKER) exec
 SYSTEM					= $(DOCKER) system
@@ -31,7 +30,7 @@ EDIT					= vim -O
 ENV_PATH				= srcs/.env
 
 COMPOSE_PATH			= $(SRCS_PATH)docker-compose.yml
-COMPOSE					= docker compose -f $(COMPOSE_PATH)
+COMPOSE					= docker-compose -f $(COMPOSE_PATH)
 
 all: build
 
@@ -43,6 +42,9 @@ up:
 
 down:
 	$(COMPOSE) down
+
+ps:
+	$(COMPOSE) ps
 
 logs:
 	$(COMPOSE) logs
@@ -74,9 +76,6 @@ volumerm:
 
 images:
 	$(IMAGES)
-
-ps:
-	$(PS) -a
 
 # nginx
 nginxstop:
