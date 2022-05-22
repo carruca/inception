@@ -26,8 +26,9 @@ RUN sed -i 's/skip-networking/#skip-networking/' my.cnf.d/mariadb-server.cnf \
 WORKDIR /run/mysqld
 RUN chown -R mysql:mysql .
 
-COPY tools/db-setup.sh .
-RUN sh db-setup.sh \
-	&& rm db-setup.sh
+COPY tools/db_setup.sh .
+COPY tools/wp_backup.sql .
+RUN sh db_setup.sh \
+	&& rm db_setup.sh wp_backup.sql
 
 CMD ["mariadbd", "--user=mysql"]

@@ -1,6 +1,7 @@
 SRCS_PATH				= srcs/
 REQS_PATH				= $(SRCS_PATH)requirements/
 IMG_TAG					= dev
+VOLUME_PATH				= ${HOME}/data
 
 NGINX_PATH				= $(REQS_PATH)nginx/
 NGINX_CONTAINER			= nginx
@@ -10,20 +11,22 @@ MARIADB_PATH			= $(REQS_PATH)mariadb/
 MARIADB_CONTAINER		= mariadb
 MARIADB_IMAGE			= $(MARIADB_CONTAINER)
 MARIADB_VOLUME			= mariadb-volume
+MARIADB_VOLUME_PATH		= $(VOLUME_PATH)/mariadb
 
 WORDPRESS_PATH			= $(REQS_PATH)wordpress/
 WORDPRESS_CONTAINER		= wordpress
 WORDPRESS_IMAGE			= $(WORDPRESS_CONTAINER)
 WORDPRESS_VOLUME		= wordpress-volume
+WORDPRESS_VOLUME_PATH	= $(VOLUME_PATH)/wordpress
 
 DOCKER					= docker
-
 STOP					= $(DOCKER) stop
 RM						= $(DOCKER) rm
 RMI						= $(DOCKER) rmi
 IMAGES					= $(DOCKER) images
 EXEC					= $(DOCKER) exec
 SYSTEM					= $(DOCKER) system
+VOLUME					= $(DOCKER) volume
 
 EDIT					= vim -O
 
@@ -72,7 +75,8 @@ clean: stop rm
 re: clean build
 
 volumerm:
-	$(DOCKER) volume rm $(MARIADB_VOLUME) $(WORDPRESS_VOLUME)
+	$(VOLUME) rm $(MARIADB_VOLUME) $(WORDPRESS_VOLUME)
+	sudo rm -r $(MARIADB_VOLUME_PATH)/* $(WORDPRESS_VOLUME_PATH)/*
 
 images:
 	$(IMAGES)
