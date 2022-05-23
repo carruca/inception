@@ -29,6 +29,4 @@ WORKDIR /etc/php8/php-fpm.d
 COPY conf/www.conf.template .
 RUN envsubst '$WORDPRESS_DB_NAME' < www.conf.template > www.conf
 
-#RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar 2> /dev/null
-
 CMD ["php-fpm8", "-F"]
